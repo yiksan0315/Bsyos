@@ -12,3 +12,6 @@
 
 #ignore note
 Doc/*.txt
+
+#ignore gch
+*.gch

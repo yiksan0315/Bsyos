@@ -14,38 +14,30 @@ int main(int argc,char *argv[])
 		exit(-1);
 	}
 	
-	int FileSz,i,iSize;
-	FILE* ReszFp,*ImgFp;
+	int i;
+	unsigned int iNeedFileSz,iSize;
+	FILE* ReszFp;
 	
-	ReszFp=fopen(argv[1],"rb"); ImgFp=fopen("Temp/ResizeImage.img","wb"); 
+	ReszFp=fopen(argv[1],"ab"); 
 	if(ReszFp==NULL)
 	{
 		printf("error:Couldn't find file:%s\n",argv[1]);
 		exit(-1);
 	}  
-	if(ImgFp==NULL)
-	{
-		printf("error:Couldn't Open the File:ResizeImage.img\n");
-		exit(-1);
-	}
 	
 	fseek(ReszFp,0l,SEEK_END);
-	iSize=ftell(ReszFp);	FileSz=512-ftell(ReszFp)%512;
-	for(i=0; i<FileSz; i++)
-		fputc(0x00,ImgFp);
+	iSize=ftell(ReszFp);	iNeedFileSz=512-ftell(ReszFp)%512;
+	for(i=0; i<iNeedFileSz; i++)
+		fputc(0x00,ReszFp);
 	
 	if(fclose(ReszFp)==EOF)
 	{
 		printf("error:Fail close File Stream:%s\n",argv[1]);
 		exit(-1);
 	}
-	if(fclose(ImgFp)==EOF)
-	{
-		printf("error:Fail close File Stream:ResizeImage.img\n");
-		exit(-1);
-	}
 	
-	printf("ReSize File:[%s] Successfully!\nResized File Size:%dbyte\n",argv[1],iSize+FileSz);
+	printf("ReSize File:[%s] Successfully!\n",argv[1]);
+	printf("Resized File Size:%dbyte\n",iSize+iNeedFileSz);
 	return 0;
 }
 

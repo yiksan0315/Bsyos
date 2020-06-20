@@ -20,7 +20,6 @@ clean_Temp:
 kernel_64.img:$(TEMPDIR)/kernel_64.bin
 	$(OBJCOPY) $^ $@
 	$(RESIZEIMAGE) $@
-	cat $(TEMPDIR)/ResizeImage.img >> $@
 
 $(TEMPDIR)/kernel_64.bin:$(ENTRYOBJECT) $(COBJECT) $(ASMOBJECT)
 	$(LD) -o $@ $^

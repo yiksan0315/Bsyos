@@ -2,7 +2,7 @@
 
 void MakePageTable(void)
 {
-	int i,j;
+	int i;
 	uint PageAddress=0;
 	PML4T PML4_Table;
 	PDPT PageDirPtr_Table;

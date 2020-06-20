@@ -7,19 +7,14 @@ RESIZEIMAGE=../Utility/ResizeImage.out
 TEMPDIR=Temp
 SOURCEDIR=Source
 
-all:$(TEMPDIR)/GDT.img kernel_32.img
+all:kernel_32.img #$(TEMPDIR)/GDT.img 
 
-kernel_32.img:$(TEMPDIR)/kernel_32.bin
 #	$(OBJCOPY) $^ $(TEMPDIR)/Tempimg.img
 #	cat $(TEMPDIR)/GDT.img $(TEMPDIR)/Tempimg.img> $@
-#	cat $(TEMPDIR)/Tempimg.img> $@
-#	$(RESIZEIMAGE) $@
-	$(RESIZEIMAGE) $<
-#	cat $(TEMPDIR)/ResizeImage.img >> $@
-	cat $< $(TEMPDIR)/ResizeImage.img > $@
 
-$(TEMPDIR)/kernel_32.bin:$(TEMPDIR)/Boot.o $(TEMPDIR)/kernel.o $(TEMPDIR)/IO.o $(TEMPDIR)/paging.o #$(TEMPDIR)/Entry_64bit.o 
+kernel_32.img:$(TEMPDIR)/Boot.o $(TEMPDIR)/kernel.o $(TEMPDIR)/IO.o $(TEMPDIR)/paging.o $(TEMPDIR)/Entry_64bit.o 
 	$(LD) -o $@ $^
+	$(RESIZEIMAGE) $@
 
 $(TEMPDIR)/paging.o:$(SOURCEDIR)/paging.c
 	$(CC) -o $@ $^
@@ -30,11 +25,11 @@ $(TEMPDIR)/kernel.o:$(SOURCEDIR)/kernel.c
 $(TEMPDIR)/IO.o:$(SOURCEDIR)/IO.c
 	$(CC) -o $@ $^
 
-#$(TEMPDIR)/Entry_64bit.o:$(SOURCEDIR)/Entry_64bit.asm
-#	$(NASM) -f elf -o $@ $^
+$(TEMPDIR)/Entry_64bit.o:$(SOURCEDIR)/Entry_64bit.asm
+	$(NASM) -f elf -o $@ $^
 
-$(TEMPDIR)/GDT.img:$(SOURCEDIR)/GDT.asm
-	$(NASM) -f bin -o $@ $^
+#$(TEMPDIR)/GDT.img:$(SOURCEDIR)/GDT.asm
+#	$(NASM) -f bin -o $@ $^
 
 $(TEMPDIR)/Boot.o:$(SOURCEDIR)/Boot.S
 	$(CC) -o $@ $^
