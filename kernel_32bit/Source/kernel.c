@@ -1,10 +1,9 @@
-#include "IO.h"
-#include "Page.h"
+#include "tty.h"
 
-bool Check_Memory(void);
-bool Init_IA32e(void);
+BOOL Check_Memory(void);
+BOOL Init_IA32e(void);
 
-void _CPUID(uint arg_EAX,uint* ret_EAX,uint* EBX,uint* ECX,uint* EDX);
+void _CPUID(u32 arg_EAX,u32* ret_EAX,u32* EBX,u32* ECX,u32* EDX);
 void Switch_IA_32e_Mode();
 void kCopyKernel64ImageTo2Mbyte( void );
 
@@ -13,7 +12,7 @@ void Debug(int Number);
 void main()
 { 
 	char CpuMessage[22]={"Cpu is:["};
-	uint arg_ERgst[4];
+	u32 arg_ERgst[4];
 	printk("Check Memory size...",7,_WHITE);
 	if(!Check_Memory())
 	{
@@ -32,7 +31,7 @@ void main()
 	printk("Initializing IA-32e Kernel Area Successfully!",10,_BLUE);
 	_CPUID(0,&arg_ERgst[0],&arg_ERgst[1],&arg_ERgst[2],&arg_ERgst[3]);
 	
-	*((uint*)CpuMessage+2)=arg_ERgst[1]; *((uint*)CpuMessage+3)=arg_ERgst[3]; *((uint*)CpuMessage+4)=arg_ERgst[2];
+	*((u32*)CpuMessage+2)=arg_ERgst[1]; *((u32*)CpuMessage+3)=arg_ERgst[3]; *((u32*)CpuMessage+4)=arg_ERgst[2];
 	CpuMessage[20]=']'; CpuMessage[21]='\0';
 	printk(CpuMessage,12,CYAN);
 	
@@ -47,10 +46,8 @@ void main()
 		return ;
 	}
 	printk("Switch to IA-32e Mode...",15,_WHITE);
-//	Debug(*(int *)(0x7000000));
-	//MakePageTable();
 //	kCopyKernel64ImageTo2Mbyte();
-//	Switch_IA_32e_Mode();
+	Switch_IA_32e_Mode();
     return ;
 }
 
@@ -74,47 +71,47 @@ void Debug(int Number){
 		Video++;
 	}
 }
-bool Check_Memory(void)
+BOOL Check_Memory(void)
 {
-	uint* NowAddress;
-	for(NowAddress=(uint *)0x100000; NowAddress<=(uint *)0x8000000; NowAddress+=(0x100000/4))
+	u32* NowAddress;
+	for(NowAddress=(u32 *)0x100000; NowAddress<=(u32 *)0x8000000; NowAddress+=(0x100000/4))
 	{
 		*NowAddress=0x12345678;
 		if(*NowAddress!=0x12345678)
 		{
-			return false;
+			return FALSE;
 		}
 	}
-	return true;
+	return TRUE;
 }
 
-bool Init_IA32e(void)
+BOOL Init_IA32e(void)
 {
-	uint* NowAddress;
+	u32* NowAddress;
 	printk("what?",2,_CYAN);
-	for(NowAddress=(uint *)0x112A02; NowAddress<=(uint *)0x600000; NowAddress++)
+	for(NowAddress=(u32 *)0x112A02; NowAddress<=(u32 *)0x600000; NowAddress++)
 	{
 		Debug((int)NowAddress);
 		*NowAddress=0x00;
 		if(*NowAddress!=0x00)
-			return false;
+			return FALSE;
 	}
-	return true;
+	return TRUE;
 }
 
 /*void kCopyKernel64ImageTo2Mbyte( void )
 {
     unsigned short wKernel32SectorCount, wTotalKernelSectorCount;
-    uint* pdwSourceAddress,* pdwDestinationAddress;
+    u32* pdwSourceAddress,* pdwDestinationAddress;
 
     int i;
     wTotalKernelSectorCount = *( (unsigned short* ) 0x7D4A );
     wKernel32SectorCount = *( ( unsigned short* ) 0x7D48 );
-    pdwSourceAddress = ( uint* ) ( 0x10000 + ( wKernel32SectorCount * 512 ) );
+    pdwSourceAddress = ( u32* ) ( 0x10000 + ( wKernel32SectorCount * 512 ) );
 
-    pdwDestinationAddress = ( uint* ) 0x200000;
+    pdwDestinationAddress = ( u32* ) 0x200000;
 
-    // IA-32e ¸ðµå Ä¿³Î ¼½ÅÍ Å©±â¸¸Å­ º¹»ç
+    // IA-32e ï¿½ï¿½ï¿½ Ä¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å©ï¿½â¸¸Å­ ï¿½ï¿½ï¿½ï¿½
 
     for( i = 0 ; i < 512 * ( wTotalKernelSectorCount - wKernel32SectorCount ) / 4; i++ )
     {

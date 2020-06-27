@@ -1,1 +1,1 @@
-Temp/paging.o: Source/paging.c Source/Page.h Source/Data\ Types.h
+Temp/paging.o: Source/paging.c Source/paging.h Source/Data_type.h

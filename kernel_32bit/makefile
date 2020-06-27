@@ -1,18 +1,14 @@
-NASM=nasm
-CC=x86_64-linux-gnu-gcc -c -m32 -MD -Wall -Wextra -ffreestanding
+NASM=nasm -f elf
+CC=x86_64-linux-gnu-gcc -c -m32 -MD -Wall -Wextra -ffreestanding 
 LD=x86_64-linux-gnu-ld -melf_i386 -e _start -nostdlib -T linker.ld
-OBJCOPY=x86_64-linux-gnu-objcopy -j .text -j .data -j .rodata -j .bss -S -O binary
 RESIZEIMAGE=../Utility/ResizeImage.out
 
 TEMPDIR=Temp
 SOURCEDIR=Source
 
-all:kernel_32.img #$(TEMPDIR)/GDT.img 
+all:kernel_32.img 
 
-#	$(OBJCOPY) $^ $(TEMPDIR)/Tempimg.img
-#	cat $(TEMPDIR)/GDT.img $(TEMPDIR)/Tempimg.img> $@
-
-kernel_32.img:$(TEMPDIR)/Boot.o $(TEMPDIR)/kernel.o $(TEMPDIR)/IO.o $(TEMPDIR)/paging.o $(TEMPDIR)/Entry_64bit.o 
+kernel_32.img:$(TEMPDIR)/Boot.o $(TEMPDIR)/GDT.o $(TEMPDIR)/kernel.o $(TEMPDIR)/tty.o $(TEMPDIR)/paging.o $(TEMPDIR)/Entry_64bit.o 
 	$(LD) -o $@ $^
 	$(RESIZEIMAGE) $@
 
@@ -22,14 +18,14 @@ $(TEMPDIR)/paging.o:$(SOURCEDIR)/paging.c
 $(TEMPDIR)/kernel.o:$(SOURCEDIR)/kernel.c
 	$(CC) -o $@ $^
 
-$(TEMPDIR)/IO.o:$(SOURCEDIR)/IO.c
+$(TEMPDIR)/tty.o:$(SOURCEDIR)/tty.c
 	$(CC) -o $@ $^
 
-$(TEMPDIR)/Entry_64bit.o:$(SOURCEDIR)/Entry_64bit.asm
-	$(NASM) -f elf -o $@ $^
+$(TEMPDIR)/Entry_64bit.o:$(SOURCEDIR)/Entry_64bit.S
+	$(NASM) -o $@ $^
 
-#$(TEMPDIR)/GDT.img:$(SOURCEDIR)/GDT.asm
-#	$(NASM) -f bin -o $@ $^
+$(TEMPDIR)/GDT.o:$(SOURCEDIR)/GDT.S
+	$(NASM) -o $@ $^
 
 $(TEMPDIR)/Boot.o:$(SOURCEDIR)/Boot.S
 	$(CC) -o $@ $^

@@ -1,2 +1,2 @@
-Temp/kernel.o: Source/kernel.c Source/IO.h Source/Data\ Types.h \
- Source/Page.h
+Temp/kernel.o: Source/kernel.c Source/tty.h Source/Data_type.h \
+ Source/paging.h
