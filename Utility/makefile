@@ -1,6 +1,9 @@
 CC=x86_64-linux-gnu-gcc
 
-all: ResizeImage.out
+all: ResizeImage
 
-ResizeImage.out:ResizeImage.c
+ResizeImage:ResizeImage.c
 	gcc -o $@ $^ 
+
+clean:
+	rm -f ResizeImage
