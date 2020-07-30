@@ -1,4 +1,5 @@
 global _init_GDT
+
 _init_GDT:
 	push eax
 	cli

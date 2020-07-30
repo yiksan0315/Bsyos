@@ -25,10 +25,6 @@ stack_top:
 .global _start
 .type _start, @function
 _start:
-
-	# reset GDT
-	call _init_GDT
-
 	# init stack
 	movl $stack_top, %esp
 	
@@ -36,17 +32,19 @@ _start:
 	push   $0
 	popf
 
+	# reset GDT
+	call _init_GDT
+
+
 	# Push the pointer to the Multiboot information structure. 
-#	pushl   %ebx
+	pushl   %ebx
 
 	# Push the magic value. 
-#	pushl   %eax
+	pushl   %eax
 
+	# Call main, It will load the 64bit kernel.
 	call main
-
-	# Enter 64bit kernel
-	call Switch_IA_32e_Mode
-
+	
 	# Hang if kernel_main unexpectedly returns.
 	cli
 1:	hlt

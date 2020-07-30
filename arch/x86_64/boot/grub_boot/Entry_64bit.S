@@ -33,6 +33,9 @@ _CPUID:
     ret
 
 Switch_IA_32e_Mode:
+	push ebp
+	mov ebp,esp
+	
     mov eax,cr4
     or eax,0x20
     mov cr4,eax
@@ -49,3 +52,9 @@ Switch_IA_32e_Mode:
     and eax,0x0000003B 
 ;   or eax,0x80000000 ;페이징 활성화시 오류가 남
     mov cr0,eax
+
+    jmp 0x08:0x106000;.jmp_k
+
+;.jmp_k:
+;	mov eax,[ebp+8]
+;	jmp eax
