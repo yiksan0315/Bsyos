@@ -33,9 +33,9 @@ _CPUID:
     ret
 
 Switch_IA_32e_Mode:
-	push ebp
-	mov ebp,esp
-	
+	push	ebp
+	mov	ebp, esp                ; Set up the stack so the variables passed from the C code can be read
+
     mov eax,cr4
     or eax,0x20
     mov cr4,eax
@@ -53,8 +53,19 @@ Switch_IA_32e_Mode:
 ;   or eax,0x80000000 ;페이징 활성화시 오류가 남
     mov cr0,eax
 
-    jmp 0x08:0x106000;.jmp_k
+	mov	esi, [ebp+8]            ; This is the kernel entry point
+	mov	[k_ptr], esi
+ 
+	jmp	0x18:0x106000; Reload code selector by jumping to 64-bit code
 
-;.jmp_k:
-;	mov eax,[ebp+8]
-;	jmp eax
+.jmp_k:
+;	mov	edi, [ebp + 12]		; 1st argument of kernel_main (pointer to multiboot structure)
+	mov	eax, [k_ptr]                                                                                                      ; This is transformed to mov rax, [k_ptr] and uses the double word reserved below 
+	dd	0			; Trick the processor, contains high address of k_ptr                                     ; as higher half of the address to k_ptr
+	jmp	eax                     
+ 
+jmp $
+
+section .data
+k_ptr:
+	dd	0

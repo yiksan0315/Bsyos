@@ -1,5 +1,6 @@
 global _init_GDT
 
+# Init Global Descriptor Tablei with 32bit descriptor
 _init_GDT:
 	push eax
 	cli
@@ -12,7 +13,10 @@ _init_GDT:
 	nop
 	nop
 
-    mov ax,KernelDataDescriptor
+jmp dword descriptor_32_t_code:.init_gdt
+
+.init_gdt:
+    mov ax,descriptor_32_t_data
     mov es,ax
     mov ds,ax
     mov fs,ax
@@ -50,14 +54,14 @@ IA_32e_DataDescriptor equ 0x10
     db 0x92 ; 1001 0010 | P=1 | DPL=0 | S=1 (Code&Data Segment) | type=0010 (read&Write)
     db 0x20
     db 0x00
-KernelCodeDescriptor equ 0x18
+descriptor_32_t_code equ 0x18
     dw 0xFFFF
     dw 0x0000
     db 0x00
     db 0x9A ; 1001 1010 | P=1 | DPL=0 | S=1 (Code&Data Segment) | type=1010 (non-conforming,readable)
     db 0xCF ; 1100 1111 | G=1 | D/B=1 | L=0(32bit) | AVL=0 | Segment Size=0xFFFF*0xF=0xFFFFF,0xFFFFF*0xFFF(4KB=4096B)=0xFFFFFFF
     db 0x00
-KernelDataDescriptor equ 0x20
+descriptor_32_t_data equ 0x20
     dw 0xFFFF
     dw 0x0000
     db 0x00

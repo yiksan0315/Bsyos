@@ -1,5 +1,5 @@
 OBJCOPY=x86_64-linux-gnu-objcopy -j .text -j .data -j .rodata -j .bss -S -O binary
-LD64=x86_64-linux-gnu-ld -melf_x86_64 -nostdlib -T linker.ld -e main #_start
+LD64=x86_64-linux-gnu-ld -melf_x86_64 -nostdlib -T linker.ld -e main -Ttext 0x106000 #_start
 RESIZEIMAGE=./Utility/ResizeImage
 
 x86_64=arch/x86_64
@@ -15,8 +15,9 @@ all: Sios.iso
 x86_64: Uti
 	make -C $(x86_64)
 #	make -C $(Ker)
-	$(LD64) -o kernel.bin $(x86_64)/$(KEROBJ) #$(KEROBJ) 
-	$(OBJCOPY) kernel.bin kernel.bin
+	$(LD64) -o kernel_.bin $(x86_64)/kernel/test.o $(x86_64)/kernel/hello.o 
+#	$(x86_64)/$(KEROBJ) #$(KEROBJ) 
+	$(OBJCOPY) kernel_.bin kernel.bin
 	$(RESIZEIMAGE) kernel.bin
 
 	mv $(x86_64)/boot/grub_boot/loader.bin .

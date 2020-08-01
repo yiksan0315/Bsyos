@@ -1,7 +1,7 @@
 #include "include/multiboot.h"
 #include "include/debug.h"
 
-extern void Switch_IA_32e_Mode(void *kenrel_entry);
+extern int Switch_IA_32e_Mode(void *IA_32eE);
 //void* load_elf_module(multiboot_uint32_t mod_start, multiboot_uint32_t mod_end) 
 
 void main(uint32_t magic_value,const void* multiboot_struct){
@@ -23,10 +23,11 @@ void main(uint32_t magic_value,const void* multiboot_struct){
 		Debug(module->mod_start);
 		Debug(module->mod_end);
 	
+		kentry = (multiboot_uint32_t*) module->mod_start;//load_elf_module(module->mod_start, module->mod_end);
 	}
 
-	kentry =0x106000;//load_elf_module(module->mod_start, module->mod_end);
-	Switch_IA_32e_Mode(kentry);
+	Debug(Switch_IA_32e_Mode(kentry));
+	Debug((multiboot_uint32_t) kentry);
 }
 
 
