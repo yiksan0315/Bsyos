@@ -15,9 +15,9 @@ all: Sios.iso
 x86_64: Uti
 	make -C $(x86_64)
 #	make -C $(Ker)
-	$(LD64) -o kernel_.bin $(x86_64)/kernel/test.o $(x86_64)/kernel/hello.o 
+	$(LD64) -o kernel.bin $(x86_64)/kernel/test.o $(x86_64)/kernel/hello.o 
 #	$(x86_64)/$(KEROBJ) #$(KEROBJ) 
-	$(OBJCOPY) kernel_.bin kernel.bin
+	$(OBJCOPY) kernel.bin kernel.bin
 	$(RESIZEIMAGE) kernel.bin
 
 	mv $(x86_64)/boot/grub_boot/loader.bin .
