@@ -35,7 +35,6 @@ _start:
 	# reset GDT
 	call _init_GDT
 
-
 	# Push the pointer to the Multiboot information structure. 
 	pushl   %ebx
 

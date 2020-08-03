@@ -6,6 +6,9 @@ extern int Switch_IA_32e_Mode(void *IA_32eE);
 
 void main(uint32_t magic_value,const void* multiboot_struct){
  
+	if(magic_value != MULTIBOOT_BOOTLOADER_MAGIC){
+		return;
+	}
     const multiboot_info_t* mb_info = multiboot_struct;         /* Make pointer to multiboot_info_t struct */
 	multiboot_uint32_t mb_flags = mb_info->flags;               /* Get flags from mb_info */
  

@@ -1,36 +1,4 @@
-global _CPUID,Switch_IA_32e_Mode
-
-_CPUID:
-    push ebp
-    mov ebp,esp
-    push eax
-    push ebx
-    push ecx
-    push edx
-    push esi
-
-    mov eax,dword[ebp+8]
-    cpuid
-
-    mov esi,dword[ebp+12]
-    mov dword[esi],eax
-
-     mov esi,dword[ebp+16]
-    mov dword[esi],ebx
-
-    mov esi,dword[ebp+20]
-    mov dword[esi],ecx
-
-    mov esi,dword[ebp+24]
-    mov dword[esi],edx
-
-    pop esi
-    pop edx
-    pop ecx
-    pop ebx
-    pop eax
-    pop ebp
-    ret
+global Switch_IA_32e_Mode
 
 Switch_IA_32e_Mode:
 	push	ebp
@@ -50,13 +18,12 @@ Switch_IA_32e_Mode:
 
     mov eax,cr0
     or eax,0xE0000000      
-    xor eax,0x60000000  ;페이징 활성화시 오류가 남 ,maybe set paging 
+    xor eax,0x60000000  
     mov cr0,eax
 
 	mov	esi, [ebp+8]            ; This is the kernel entry point
 	mov	[k_ptr], esi
 	
-;	lgdt[GDTR]
 	jmp	0x08:0x106000 ; Reload code selector by jumping to 64-bit code
 
 .jmp_k:
