@@ -52,7 +52,7 @@ IA_32e_DataDescriptor equ 0x10
     dw 0x0000
     db 0x00
     db 0x92 ; 1001 0010 | P=1 | DPL=0 | S=1 (Code&Data Segment) | type=0010 (read&Write)
-    db 0x20
+    db 0x20  
     db 0x00
 descriptor_32_t_code equ 0x18
     dw 0xFFFF

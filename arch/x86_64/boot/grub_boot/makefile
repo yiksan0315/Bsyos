@@ -1,5 +1,5 @@
 NASM32=nasm -f elf32
-CC32=x86_64-linux-gnu-gcc -c -m32 -ffreestanding -z max-page-size=0x1000 -mno-red-zone -mno-mmx -mno-sse -mno-sse2 -O2 -Wall -Wextra 
+CC32=x86_64-linux-gnu-gcc -c -m32 -ffreestanding -z max-page-size=0x1000 -mno-red-zone -mno-mmx -mno-sse -mno-sse2 -O2 -Wall -Wextra -I include
 LD32=x86_64-linux-gnu-ld -melf_i386 -e _start -nostdlib  -T multiboot_ld.ld -Ttext 0x100000
 
 BOOTOBJECT_S_intel=$(notdir $(patsubst %.S,%.o,$(wildcard *.S)))

@@ -1,4 +1,4 @@
-#include "include/debug.h"
+#include <debug.h>
 #define VIDEO 0xB8000
 #define WIDTH 80*2
 

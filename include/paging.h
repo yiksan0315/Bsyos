@@ -54,10 +54,4 @@ void MakePageTable(void);
 
 void SetEntry(PET PageEntry,u32 UpperAddress,u32 LowerAddress,u32 UpperAttr,u32 LowerAttr);
 
-//void SetEntry_NonUse(PET PageEntry);
-
-//void SetEntry_Default(PET PageEntry,u32 UpperAddress,u32 LowerAddress);
-
-//void PDT_SetEntry_Default(PDT PageEntry,u32 UpperAddress,u32 LowerAddress);
-
 #endif 
