@@ -5,6 +5,9 @@
 /* Null pointer. */
 #define NULL (void *)0
 
+/* Where 64bit kernel will be loaded. */
+#define KER_64 0x200000
+
 /* How many bytes from the start of the file we search for the header. */
 #define MULTIBOOT_SEARCH                        8192
 #define MULTIBOOT_HEADER_ALIGN                  4

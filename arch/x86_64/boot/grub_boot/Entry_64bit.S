@@ -8,7 +8,7 @@ Switch_IA_32e_Mode:
     or eax,0x20
     mov cr4,eax
 
-    mov eax,0x200000
+    mov eax,0x106000
     mov cr3,eax
 
     mov ecx,0xC0000080
@@ -24,7 +24,7 @@ Switch_IA_32e_Mode:
 	mov	esi, [ebp+8]            ; This is the kernel entry point
 	mov	[k_ptr], esi
 	
-	jmp	0x08:0x106000 ; Reload code selector by jumping to 64-bit code
+	jmp	0x08:0x200000; Reload code selector by jumping to 64-bit code
 
 .jmp_k:
 ;	mov	edi, [ebp + 12]		; 1st argument of kernel_main (pointer to multiboot structure)

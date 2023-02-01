@@ -4,7 +4,7 @@
 #define ENTRY_COUNT		512
 #define PAGE_TABLE_SIZE 0x1000
 #define PAGE_SIZE		0x200000 
-#define TABLE_ADR		0x200000 
+#define TABLE_ADR		0x106000 
 
 #define NUL				0x00
 #define NONE			0x00

@@ -1,5 +1,3 @@
-[bits 64]
-
 extern main
 
 _Entry_IA_32e:
